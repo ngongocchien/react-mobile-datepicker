@@ -711,10 +711,10 @@ var DatePickerItem = function (_Component) {
             if (this.touchData.yArr.length === 1) {
                 v = 0;
             } else {
-                var startTime = touchData.yArr[touchData.yArr.length - 2][1];
-                var endTime = touchData.yArr[touchData.yArr.length - 1][1];
-                var startY = touchData.yArr[touchData.yArr.length - 2][0];
-                var endY = touchData.yArr[touchData.yArr.length - 1][0];
+                var startTime = this.touchData.yArr[this.touchData.yArr.length - 2][1];
+                var endTime = this.touchData.yArr[this.touchData.yArr.length - 1][1];
+                var startY = this.touchData.yArr[this.touchData.yArr.length - 2][0];
+                var endY = this.touchData.yArr[this.touchData.yArr.length - 1][0];
 
                 // 计算速度
                 v = (startY - endY) / DATE_HEIGHT * 1000 / (endTime - startTime);
