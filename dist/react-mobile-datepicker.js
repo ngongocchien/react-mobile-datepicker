@@ -724,11 +724,11 @@ var DatePickerItem = function (_Component) {
             }
             console.log('v: ' + v);
 
-            var a = v > 0 ? -10 : 10; // 减速加速度
+            var a = v > 0 ? 10 : -10; // 减速加速度
             var t = Math.abs(v / a); // 3 速度减到 0 花费时间
             var totalScrollLen = v * t + a * t * t / 2; // 总滚动长度
             var __direction = Math.ceil(totalScrollLen / DATE_HEIGHT);
-            console.log(__direction);
+            console.log(totalScrollLen + ' ' + __direction);
 
             var touchY = event.pageY || event.changedTouches[0].pageY;
             var dir = touchY - this.touchY;
