@@ -578,7 +578,7 @@ var DatePickerItem = function (_Component) {
             var typeName = this.props.type;
             var dates = this.state.dates;
 
-            if (direction === 1) {
+            if (direction >= 1) {
                 this.currentIndex++;
                 this.setState({
                     dates: [].concat(toConsumableArray(dates.slice(1)), [TimeUtil['next' + typeName](dates[dates.length - 1], this.props.step)]),
@@ -595,7 +595,7 @@ var DatePickerItem = function (_Component) {
     }, {
         key: '_checkIsUpdateDates',
         value: function _checkIsUpdateDates(direction, translateY) {
-            return direction === 1 ? this.currentIndex * DATE_HEIGHT + DATE_HEIGHT / 2 < -translateY : this.currentIndex * DATE_HEIGHT - DATE_HEIGHT / 2 > -translateY;
+            return direction >= 1 ? this.currentIndex * DATE_HEIGHT + DATE_HEIGHT / 2 < -translateY : this.currentIndex * DATE_HEIGHT - DATE_HEIGHT / 2 > -translateY;
         }
 
         /**
@@ -624,9 +624,9 @@ var DatePickerItem = function (_Component) {
                 max = _props.max,
                 min = _props.min;
 
-            if (direction === -1 && date.getTime() < min.getTime() && this.moveDateCount) {
+            if (direction <= -1 && date.getTime() < min.getTime() && this.moveDateCount) {
                 this._updateDates(1);
-            } else if (direction === 1 && date.getTime() > max.getTime() && this.moveDateCount) {
+            } else if (direction >= 1 && date.getTime() > max.getTime() && this.moveDateCount) {
                 this._updateDates(-1);
             }
 
