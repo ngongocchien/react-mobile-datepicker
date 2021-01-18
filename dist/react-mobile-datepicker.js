@@ -486,6 +486,8 @@ var DatePickerItem = function (_Component) {
 
         var _this = possibleConstructorReturn(this, (DatePickerItem.__proto__ || Object.getPrototypeOf(DatePickerItem)).call(this, props));
 
+        _this.touchData = [];
+
         _this.animating = false; // 判断是否在transition过渡动画之中
         _this.touchY = 0; // 保存touchstart的pageY
         _this.translateY = 0; // 容器偏移的距离
@@ -664,10 +666,19 @@ var DatePickerItem = function (_Component) {
 
             this.translateY = this.state.translateY;
             this.moveDateCount = 0;
+
+            var eventY = event.clientY || event.touches[0].clientY;
+            this.touchData.yArr = [[eventY, new Date().getTime()]];
         }
     }, {
         key: 'handleMove',
         value: function handleMove(event) {
+            var eventY = event.clientY || event.touches[0].clientY;
+            this.touchData.yArr.push([eventY, new Date().getTime()]);
+            if (this.touchData.length > 5) {
+                this.touchData.unshift();
+            }
+
             var touchY = !isUndefined(event.targetTouches) && !isUndefined(event.targetTouches[0]) ? event.targetTouches[0].pageY : event.pageY;
 
             var dir = touchY - this.touchY;
@@ -695,9 +706,28 @@ var DatePickerItem = function (_Component) {
     }, {
         key: 'handleEnd',
         value: function handleEnd(event) {
+            var v = void 0;
+
+            if (this.touchData.yArr.length === 1) {
+                v = 0;
+            } else {
+                var startTime = touchData.yArr[touchData.yArr.length - 2][1];
+                var endTime = touchData.yArr[touchData.yArr.length - 1][1];
+                var startY = touchData.yArr[touchData.yArr.length - 2][0];
+                var endY = touchData.yArr[touchData.yArr.length - 1][0];
+
+                // 计算速度
+                v = (startY - endY) / DATE_HEIGHT * 1000 / (endTime - startTime);
+                var sign = v > 0 ? 1 : -1;
+
+                v = Math.abs(v) > 30 ? 30 * sign : v;
+            }
+            console.log('v: ' + v);
+
             var touchY = event.pageY || event.changedTouches[0].pageY;
             var dir = touchY - this.touchY;
             var direction = dir > 0 ? -1 : 1;
+            console.log('direction: ' + direction);
             this._moveToNext(direction);
         }
 
