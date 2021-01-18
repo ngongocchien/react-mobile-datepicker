@@ -724,11 +724,17 @@ var DatePickerItem = function (_Component) {
             }
             console.log('v: ' + v);
 
+            var a = v > 0 ? -10 : 10; // 减速加速度
+            var t = Math.abs(initV / a); // 3 速度减到 0 花费时间
+            var totalScrollLen = initV * t + a * t * t / 2; // 总滚动长度
+            var __direction = Math.ceil(totalScrollLen / DATE_HEIGHT);
+            console.log(__direction);
+
             var touchY = event.pageY || event.changedTouches[0].pageY;
             var dir = touchY - this.touchY;
             var direction = dir > 0 ? -1 : 1;
             console.log('direction: ' + direction);
-            this._moveToNext(direction);
+            this._moveToNext(__direction);
         }
 
         /**
