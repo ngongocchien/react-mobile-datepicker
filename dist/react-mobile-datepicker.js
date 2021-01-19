@@ -579,15 +579,15 @@ var DatePickerItem = function (_Component) {
             var dates = this.state.dates;
 
             if (direction >= 1) {
-                this.currentIndex++;
+                this.currentIndex += direction;
                 this.setState({
-                    dates: [].concat(toConsumableArray(dates.slice(1)), [TimeUtil['next' + typeName](dates[dates.length - 1], this.props.step)]),
+                    dates: [].concat(toConsumableArray(dates.slice(1)), [TimeUtil['next' + typeName](dates[dates.length - 1], direction)]),
                     marginTop: (this.currentIndex - MIDDLE_INDEX) * DATE_HEIGHT
                 });
             } else {
-                this.currentIndex--;
+                this.currentIndex -= direction;
                 this.setState({
-                    dates: [TimeUtil['next' + typeName](dates[0], -this.props.step)].concat(toConsumableArray(dates.slice(0, dates.length - 1))),
+                    dates: [TimeUtil['next' + typeName](dates[0], -direction)].concat(toConsumableArray(dates.slice(0, dates.length - 1))),
                     marginTop: (this.currentIndex - MIDDLE_INDEX) * DATE_HEIGHT
                 });
             }
