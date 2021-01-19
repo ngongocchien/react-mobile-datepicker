@@ -625,9 +625,9 @@ var DatePickerItem = function (_Component) {
                 min = _props.min;
 
             if (direction <= -1 && date.getTime() < min.getTime() && this.moveDateCount) {
-                this._updateDates(1);
+                this._updateDates(direction);
             } else if (direction >= 1 && date.getTime() > max.getTime() && this.moveDateCount) {
-                this._updateDates(-1);
+                this._updateDates(direction);
             }
 
             this._moveTo(this.currentIndex);
@@ -722,7 +722,7 @@ var DatePickerItem = function (_Component) {
 
                 v = Math.abs(v) > 30 ? 30 * sign : v;
             }
-            console.log('v: ' + v);
+            // console.log('v: ' + v);
 
             var a = v > 0 ? 10 : -10; // 减速加速度
             var t = Math.abs(v / a); // 3 速度减到 0 花费时间
@@ -730,10 +730,6 @@ var DatePickerItem = function (_Component) {
             var __direction = Math.ceil(totalScrollLen / DATE_HEIGHT);
             console.log(totalScrollLen + ' ' + __direction);
 
-            var touchY = event.pageY || event.changedTouches[0].pageY;
-            var dir = touchY - this.touchY;
-            var direction = dir > 0 ? -1 : 1;
-            console.log('direction: ' + direction);
             this._moveToNext(__direction);
         }
 
