@@ -644,6 +644,7 @@ var DatePickerItem = function (_Component) {
         value: function _moveTo(currentIndex) {
             var _this3 = this;
 
+            console.log('currentIndex: ' + currentIndex);
             this.animating = true;
 
             addPrefixCss(this.refs.scroll, { transition: 'transform .2s ease-out' });
@@ -706,10 +707,11 @@ var DatePickerItem = function (_Component) {
     }, {
         key: 'handleEnd',
         value: function handleEnd(event) {
-            var v = void 0;
-
             if (this.touchData.yArr.length === 1) {
-                v = 0;
+                var touchY = event.pageY || event.changedTouches[0].pageY;
+                var _dir = touchY - this.touchY;
+                var direction = _dir > 0 ? -1 : 1;
+                this._moveToNext(direction);
             } else {
                 var startTime = this.touchData.yArr[this.touchData.yArr.length - 2][1];
                 var endTime = this.touchData.yArr[this.touchData.yArr.length - 1][1];
@@ -717,20 +719,18 @@ var DatePickerItem = function (_Component) {
                 var endY = this.touchData.yArr[this.touchData.yArr.length - 1][0];
 
                 // 计算速度
-                v = (startY - endY) / DATE_HEIGHT * 1000 / (endTime - startTime);
+                var v = (startY - endY) / DATE_HEIGHT * 1000 / (endTime - startTime);
                 var sign = v > 0 ? 1 : -1;
 
                 v = Math.abs(v) > 30 ? 30 * sign : v;
+
+                var a = v > 0 ? 10 : -10; // 减速加速度
+                var t = Math.abs(v / a); // 3 速度减到 0 花费时间
+                var totalScrollLen = v * t + a * t * t / 2; // 总滚动长度
+                var __direction = Math.ceil(totalScrollLen / DATE_HEIGHT);
+
+                this._moveToNext(__direction);
             }
-            // console.log('v: ' + v);
-
-            var a = v > 0 ? 10 : -10; // 减速加速度
-            var t = Math.abs(v / a); // 3 速度减到 0 花费时间
-            var totalScrollLen = v * t + a * t * t / 2; // 总滚动长度
-            var __direction = Math.ceil(totalScrollLen / DATE_HEIGHT);
-            console.log(totalScrollLen + ' ' + __direction);
-
-            this._moveToNext(__direction);
         }
 
         /**
